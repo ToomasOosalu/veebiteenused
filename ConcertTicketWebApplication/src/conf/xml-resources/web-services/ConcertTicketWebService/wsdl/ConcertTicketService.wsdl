@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+	xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" 
+	xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" 
+	xmlns:tns="http://www.ttu.ee/idu0075/2015/ws/concert" 
+	targetNamespace="http://www.ttu.ee/idu0075/2015/ws/concert">
+	<wsdl:types>
+		<xs:schema  targetNamespace="http://www.ttu.ee/idu0075/2015/ws/concert" elementFormDefault="qualified">
+			<xs:simpleType name="ticketAreaType">
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="fanzone"/>
+					<xs:enumeration value="balcony"/>
+					<xs:enumeration value="regular"/>
+				</xs:restriction>
+			</xs:simpleType>
+			<xs:complexType name ="concertType">
+				<xs:sequence>
+					<xs:element name="id" type="xs:integer"/>
+					<xs:element name="title" type="xs:string"/>
+					<xs:element name="artist" type="xs:string"/>
+					<xs:element name="venue" type="xs:string"/>
+					<xs:element name="startDate" type="xs:dateTime"/>
+					<xs:element name="endDate" type="xs:dateTime"/>
+					<xs:element name="nrOfTickets" type="xs:integer"/>
+					<xs:element name="freeTickets" type="xs:integer"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="addConcertType">
+				<xs:sequence>
+					<xs:element name="title" type="xs:string"/>
+					<xs:element name="artist" type="xs:string"/>
+					<xs:element name="venue" type="xs:string"/>
+					<xs:element name="startDate" type="xs:dateTime"/>
+					<xs:element name="endDate" type="xs:dateTime"/>
+					<xs:element name="nrOfTickets" type="xs:integer"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ticketType">
+				<xs:sequence>
+					<xs:element name="id" type="xs:integer"/>
+					<xs:element name="type" type="tns:ticketAreaType"/>
+					<xs:element name="price" type="xs:decimal"/>
+					<xs:element name="standing" type="xs:boolean"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="addTicketType">
+				<xs:sequence>
+					<xs:element name="type" type="tns:ticketAreaType"/>
+					<xs:element name="price" type="xs:decimal"/>
+					<xs:element name="standing" type="xs:boolean"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="ticketListRequestType">
+				<xs:sequence>
+					<xs:element name="requestId" type="xs:integer"/>
+					<xs:element name="token" type="xs:string"/>
+					<xs:element name="searchCriteria" type="tns:searchCriteriaType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="searchCriteriaType">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="type" type="xs:string"/>
+					<xs:element minOccurs="0" name="price" type="xs:decimal"/>
+					<xs:element minOccurs="0" name="standing" type="xs:boolean"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="concertTicketType">
+				<xs:sequence>
+					<xs:element name="id" type="xs:integer"/>
+					<xs:element name="ticketId" type="xs:integer"/>
+					<xs:element name="concertId" type="xs:integer"/>
+					<xs:element name="sold" type="xs:boolean"/>
+
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="addConcertTicketType">
+				<xs:sequence>
+					<xs:element name="ticketId" type="xs:integer"/>
+					<xs:element name="concertId" type="xs:integer"/>
+					<xs:element name="quantity" type="xs:integer"/>
+					<xs:element name="sold" type="xs:boolean"/>
+				</xs:sequence>
+			</xs:complexType>
+
+
+			<xs:element name="getConcertRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="requestId" type="xs:integer"/>
+						<xs:element name="token" type="xs:string"/>
+						<xs:element name="id" type="xs:integer"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getConcertResponse" type="tns:concertType"/>
+			<xs:element name="addConcertRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="requestId" type="xs:integer"/>
+						<xs:element name="token" type="xs:string"/>
+						<xs:element maxOccurs="unbounded" name="concert" type="tns:addConcertType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="addConcertResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" name="concert" type="tns:concertType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getConcertListRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="requestId" type="xs:integer"/>
+						<xs:element name="token" type="xs:string"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getConcertListResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="concert" type="tns:concertType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getTicketRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="requestId" type="xs:integer"/>
+						<xs:element name="token" type="xs:string"/>
+						<xs:element name="id" type="xs:integer"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getTicketResponse" type="tns:ticketType"/>
+			<xs:element name="addTicketRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="requestId" type="xs:integer"/>
+						<xs:element name="token" type="xs:string"/>
+						<xs:element maxOccurs="unbounded" name="ticket" type="tns:addTicketType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="addTicketResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" name="ticket" type="tns:ticketType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getTicketListRequest" type="tns:ticketListRequestType"/>
+			<xs:element name="getTicketListResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="ticket" type="tns:ticketType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getConcertTicketListRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="requestId" type="xs:integer"/>
+						<xs:element name="token" type="xs:string"/>
+						<xs:element minOccurs="0" name="concertId" type="xs:integer"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="getConcertTicketListResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element minOccurs="0" maxOccurs="unbounded" name="concertTicket" type="tns:concertTicketType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="addConcertTicketRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="requestId" type="xs:integer"/>
+						<xs:element name="token" type="xs:string"/>
+						<xs:element maxOccurs="unbounded" name="concertTicket" type="tns:addConcertTicketType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="addConcertTicketResponse">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element maxOccurs="unbounded" name="concertTickets" type="tns:concertTicketType"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="sellConcertTicketRequest">
+				<xs:complexType>
+					<xs:sequence>
+						<xs:element name="requestId" type="xs:integer"/>
+						<xs:element name="token" type="xs:string"/>
+						<xs:element name="concertTicketId" type="xs:integer"/>
+					</xs:sequence>
+				</xs:complexType>
+			</xs:element>
+			<xs:element name="sellConcertTicketResponse" type="xs:boolean"/>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="getConcertMessageRequest">
+		<wsdl:part name="parameter" element="tns:getConcertRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getConcertMessageResponse">
+		<wsdl:part name="parameter" element="tns:getConcertResponse"/>
+	</wsdl:message>
+	<wsdl:message name="addConcertMessageRequest">
+		<wsdl:part name="parameter" element="tns:addConcertRequest"/>
+	</wsdl:message>
+	<wsdl:message name="addConcertMessageResponse">
+		<wsdl:part name="parameter" element="tns:addConcertResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getConcertListMessageRequest">
+		<wsdl:part name="parameter" element="tns:getConcertListRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getConcertListMessageResponse">
+		<wsdl:part name="parameter" element="tns:getConcertListResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getTicketMessageRequest">
+		<wsdl:part name="parameter" element="tns:getTicketRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getTicketMessageResponse">
+		<wsdl:part name="parameter" element="tns:getTicketResponse"/>
+	</wsdl:message>
+	<wsdl:message name="addTicketMessageRequest">
+		<wsdl:part name="parameter" element="tns:addTicketRequest"/>
+	</wsdl:message>
+	<wsdl:message name="addTicketMessageResponse">
+		<wsdl:part name="parameter" element="tns:addTicketResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getTicketListMessageRequest">
+		<wsdl:part name="parameter" element="tns:getTicketListRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getTicketListMessageResponse">
+		<wsdl:part name="parameter" element="tns:getTicketListResponse"/>
+	</wsdl:message>
+	<wsdl:message name="getConcertTicketListMessageRequest">
+		<wsdl:part name="parameter" element="tns:getConcertTicketListRequest"/>
+	</wsdl:message>
+	<wsdl:message name="getConcertTicketListMessageResponse">
+		<wsdl:part name="parameter" element="tns:getConcertTicketListResponse"/>
+	</wsdl:message>
+	<wsdl:message name="addConcertTicketMessageRequest">
+		<wsdl:part name="parameter" element="tns:addConcertTicketRequest"/>
+	</wsdl:message>
+	<wsdl:message name="addConcertTicketMessageResponse">
+		<wsdl:part name="parameter" element="tns:addConcertTicketResponse"/>
+	</wsdl:message>
+	<wsdl:message name="sellConcertTicketMessageRequest">
+		<wsdl:part name="parameter" element="tns:sellConcertTicketRequest"/>
+	</wsdl:message>
+	<wsdl:message name="sellConcertTicketMessageResponse">
+		<wsdl:part name="parameter" element="tns:sellConcertTicketResponse"/>
+	</wsdl:message>
+	<wsdl:portType name="ConcertPortType">
+		<wsdl:operation name="getConcert">
+			<wsdl:input message="tns:getConcertMessageRequest"/>
+			<wsdl:output message="tns:getConcertMessageResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="addConcert">
+			<wsdl:input message="tns:addConcertMessageRequest"/>
+			<wsdl:output message="tns:addConcertMessageResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getConcertList">
+			<wsdl:input message="tns:getConcertListMessageRequest"/>
+			<wsdl:output message="tns:getConcertListMessageResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getTicket">
+			<wsdl:input message="tns:getTicketMessageRequest"/>
+			<wsdl:output message="tns:getTicketMessageResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="addTicket">
+			<wsdl:input message="tns:addTicketMessageRequest"/>
+			<wsdl:output message="tns:addTicketMessageResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getTicketList">
+			<wsdl:input message="tns:getTicketListMessageRequest"/>
+			<wsdl:output message="tns:getTicketListMessageResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="getConcertTicketList">
+			<wsdl:input message="tns:getConcertTicketListMessageRequest"/>
+			<wsdl:output message="tns:getConcertTicketListMessageResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="addConcertTicket">
+			<wsdl:input message="tns:addConcertTicketMessageRequest"/>
+			<wsdl:output message="tns:addConcertTicketMessageResponse"/>
+		</wsdl:operation>
+		<wsdl:operation name="sellConcertTicket">
+			<wsdl:input message="tns:sellConcertTicketMessageRequest"/>
+			<wsdl:output message="tns:sellConcertTicketMessageResponse"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="ConcertBinding" type="tns:ConcertPortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="getConcert">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addConcert">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getConcertList">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>	
+		<wsdl:operation name="getTicket">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addTicket">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getTicketList">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>	
+		<wsdl:operation name="getConcertTicketList">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="addConcertTicket">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="sellConcertTicket">
+			<wsdl:input>
+				<soap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal"/>
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="ConcertService">
+		<wsdl:port name="ConcertPort" binding="tns:ConcertBinding">
+			<soap:address location="Empty"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
