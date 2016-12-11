@@ -114,6 +114,7 @@ public class ConcertTicketsResource {
                 AddConcertTicketType concertTicket = new AddConcertTicketType();
                 concertTicket.setTicketId(t.getTicketId());
                 concertTicket.setConcertId(t.getConcertId());
+                concertTicket.setQuantity(t.getQuantity());
                 concertTicket.setSold(t.isSold());
                 concertTickets.add(concertTicket);
             }

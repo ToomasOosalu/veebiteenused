@@ -66,8 +66,8 @@ public class GetConcertTicketListResponse {
         return this.concertTicket;
     }
 
-    public void setConcertTicket(List<ConcertTicketType> arrayList) {
-        this.concertTicket = arrayList;
+    public void setConcertTicket(List<ConcertTicketType> tickets) {
+        this.concertTicket = tickets;
     }
 
 }
